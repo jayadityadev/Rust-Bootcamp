@@ -41,7 +41,7 @@ async fn query_redirect(req: HttpRequest) -> impl Responder {
     let name = req.query_string().to_string();
     // let truncated_name = &name[5..];
     let truncated_name = &name[5..].replace("+", "%20");
-    println!("Name: {}", truncated_name);
+    // println!("Name: {}", truncated_name);
     HttpResponse::Found()
         .header("Location", format!("/app/{}", truncated_name))
         .finish()

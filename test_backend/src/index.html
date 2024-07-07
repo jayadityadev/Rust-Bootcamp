@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +15,10 @@
                 --input-border-color: #4a5568;
                 --button-bg-color: #4a5568;
                 --button-hover-bg-color: #2d3748;
+                --input-text-color: #ffffff; /* white text in dark mode */
             }
         }
+
         @media (prefers-color-scheme: light) {
             :root {
                 --bg-color: #f7fafc;
@@ -24,20 +27,44 @@
                 --input-border-color: #cbd5e0;
                 --button-bg-color: #3182ce;
                 --button-hover-bg-color: #2b6cb0;
+                --input-text-color: #000000; /* black text in light mode */
             }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .input-field {
+            background-color: var(--input-bg-color);
+            border-color: var(--input-border-color);
+            color: var(--input-text-color); /* Set input text color */
+        }
+
+        .submit-button {
+            background-color: var(--button-bg-color);
+        }
+
+        .submit-button:hover {
+            background-color: var(--button-hover-bg-color);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen">
+
+<body class="flex items-center justify-center min-h-screen">
     <div class="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-sm container">
         <h1 class="text-2xl font-bold mb-6">Enter Name</h1>
-        <form id="nameForm" action="/app/query" method="get" onsubmit="return encodeSpaces()">
+        <form id="nameForm" action="/app/query" method="get" onsubmit="return encodeSpaces(event)">
             <div class="mb-4">
                 <label for="name" class="block text-gray-400 text-sm font-bold mb-2">Name</label>
-                <input type="text" id="name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline input-field --text-color=black">
+                <input type="text" id="name" name="name"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline input-field"
+                    aria-label="Name">
             </div>
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline submit-button">Submit</button>
+                <button type="submit"
+                    class="submit-button text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
             </div>
         </form>
     </div>
@@ -46,11 +73,10 @@
         function encodeSpaces(event) {
             event.preventDefault();
             const nameInput = document.getElementById('name').value;
-            console.log(nameInput);
-            const encodedValue = encodeURIComponent(nameInput);
-            console.log(encodedValue);
+            const encodedValue = encodeURIComponent(nameInput.trim());
             window.location.href = `/app/query?name=${encodedValue}`;
         }
     </script>
 </body>
+
 </html>
