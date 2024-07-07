@@ -27,7 +27,8 @@ async fn contact() -> impl Responder {
 async fn get_document(client: web::Data<Arc<Client>>, name: web::Path<String>) -> impl Responder {
     let database = client.database("test_db");
     let collection = database.collection::<MyDocument>("testCollection");
-    let name_str = name.into_inner();
+    let name_str = name.into_inner().replace("+", "%20");
+    // println!("Name: {}", name_str);
 
     match collection.find_one(doc! { "name": &name_str }, None).await {
         Ok(Some(document)) => HttpResponse::Ok().json(document),
@@ -38,7 +39,9 @@ async fn get_document(client: web::Data<Arc<Client>>, name: web::Path<String>) -
 
 async fn query_redirect(req: HttpRequest) -> impl Responder {
     let name = req.query_string().to_string();
-    let truncated_name = &name[5..];
+    // let truncated_name = &name[5..];
+    let truncated_name = &name[5..].replace("+", "%20");
+    println!("Name: {}", truncated_name);
     HttpResponse::Found()
         .header("Location", format!("/app/{}", truncated_name))
         .finish()
