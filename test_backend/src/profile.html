@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-5">
+        <div class="max-w-sm mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+            <div class="md:flex">
+                <div class="md:flex-shrink-0">
+                    <img id="profile-pic" class="h-48 w-full object-cover md:w-48" src="" alt="Profile Picture">
+                </div>
+                <div class="p-8">
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold" id="user-name">Loading...
+                    </div>
+                    <p class="mt-2 text-gray-500" id="user-email">Loading...</p>
+                    <p class="mt-2 text-gray-500" id="user-bio">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUserData();
+        });
+
+        function fetchUserData() {
+            let name = new URLSearchParams(window.location.search).get('name');
+            // Fetching the dummy data from a local JSON file
+            const apiUrl = 'http://localhost:8080/app/{name}'; // Adjust the path as necessary
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                // console.log(response.json())
+                .then(data => {
+                    const user = data[0];
+                     // Select the first user for demonstration
+                    console.log(user);
+                    document.getElementById('profile-pic').src = 'https://via.placeholder.com/150';
+                    document.getElementById('user-name').textContent = user.name;
+                    document.getElementById('user-email').textContent = user.email;
+                    document.getElementById('user-bio').textContent = `Employment Type: ${user.employment_type}, Company: ${user.company}, Team: ${user.team}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
